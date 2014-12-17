@@ -1,3 +1,6 @@
+// System includes
+#include <iostream>
+
 // Local includes
 #include "PyToolTests/Selector.h"
 
@@ -20,7 +23,7 @@ Selector::~Selector()
 //-----------------------------------------------------------------------------
 void Selector::Init(TTree* tree)
 {
-  cout << "Selector::Init" << endl;
+  std::cout << "Selector::Init" << std::endl;
   //m_tree = tree;
   //d3pd.ReadFrom(tree);
 }
@@ -32,7 +35,7 @@ void Selector::Init(TTree* tree)
 //-----------------------------------------------------------------------------
 void Selector::Begin(TTree* /*tree*/)
 {
-  cout << "Selector::Begin" << endl;
+  std::cout << "Selector::Begin" << std::endl;
 }
 
 //-----------------------------------------------------------------------------
@@ -41,4 +44,14 @@ void Selector::Begin(TTree* /*tree*/)
 Bool_t Selector::Process(Long64_t entry)
 {
   return kTRUE;
+}
+
+//-----------------------------------------------------------------------------
+// The Terminate() function is the last function to be called during
+// a query. It always runs on the client, it can be used to present
+// the results graphically or save the results to file.
+//-----------------------------------------------------------------------------
+void Selector::Terminate()
+{
+  std::cout << "Selector::Terminate" << std::endl;
 }

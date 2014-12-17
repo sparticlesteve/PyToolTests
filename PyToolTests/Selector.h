@@ -37,7 +37,7 @@ class Selector : public TSelector
     virtual Bool_t  Process(Long64_t entry);
 
     /// Update the event store
-    virtual Int_t   GetEntry(Long64_t e, Int_t getall = 0);
+    //virtual Int_t   GetEntry(Long64_t e, Int_t getall = 0);
 
   protected:
 
