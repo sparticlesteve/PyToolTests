@@ -4,7 +4,10 @@
 #include "EventLoop/OutputStream.h"
 #include "PyToolTests/MyELAlg.h"
 
+// CP includes
 #include "JetSelectorTools/JetCleaningTool.h"
+#include "JetInterface/IJetSelector.h"
+#include "JetResolution/IJERSmearingTool.h"
 
 // EDM includes
 #include "xAODEventInfo/EventInfo.h"
@@ -23,8 +26,8 @@ ClassImp(MyELAlg)
 
 
 MyELAlg :: MyELAlg()
-    : lepPtMin(20.*GeV),
-      jetPtMin(20.*GeV)
+    : m_jetCleaning("JetCleaningTool"),
+      m_jerTool("JERSmearingTool")
 {
   // Here you put any code for the base initialization of variables,
   // e.g. initialize all pointers to 0.  Note that you should only put
@@ -102,18 +105,27 @@ EL::StatusCode MyELAlg :: initialize()
 
   m_event = wk()->xaodEvent();
 
+  // Try to retrieve the jet cleaning tool
+  if(m_jetCleaning.retrieve().isFailure()){
+    Error("initialize()", "Unable to retrieve the jet cleaning tool");
+    return EL::StatusCode::FAILURE;
+  }
+
+  // Retrieve the JER smearing tool
+  if(m_jerTool.retrieve().isFailure()){
+    Error("initialize()", "Unable to retrieve the JER smearing tool");
+    return EL::StatusCode::FAILURE;
+  }
+
   // Initialize and configure jet tool
+  /*
   m_jetCleaning = new JetCleaningTool("JetCleaning");
   m_jetCleaning->msg().setLevel(MSG::DEBUG);
   if(m_jetCleaning->setProperty("CutLevel", "MediumBad").isFailure())
     return EL::StatusCode::FAILURE;
   if(m_jetCleaning->initialize().isFailure())
     return EL::StatusCode::FAILURE;
-
-  // Output xAOD
-  TFile* file = wk()->getOutputFile("outputLabel");
-  if(m_event->writeTo(file).isFailure())
-    return EL::StatusCode::FAILURE;
+  */
 
   Info("initialize()", "Number of events = %lli", m_event->getEntries());
 
@@ -147,13 +159,18 @@ EL::StatusCode MyELAlg :: execute()
     Error("execute()", "Failed to retrieve AntiKt4LCTopoJets container");
     return EL::StatusCode::FAILURE;
   }
-  Info("execute()", " number of jets = %lu", jets->size());
+  //Info("execute()", " number of jets = %lu", jets->size());
 
   // Loop over jets in the container
   for(const auto jet : *jets){
     // Select good jets
-    if(!m_jetCleaning->accept(*jet)) continue;
-    Info("execute()", "  jet pt = %.2f GeV", jet->pt() * 0.001);
+    if(!m_jetCleaning->keep(*jet)) continue;
+
+    // Correct a copy of the jet
+    xAOD::Jet* jetCopy = 0;
+    if(m_jerTool->correctedCopy(*jet, jetCopy) != CP::CorrectionCode::Ok)
+      return EL::StatusCode::FAILURE;
+    //Info("execute()", "  jet pt = %.2f GeV", jet->pt() * 0.001);
   }
 
   return EL::StatusCode::SUCCESS;
@@ -183,7 +200,7 @@ EL::StatusCode MyELAlg :: finalize()
   // merged.  This is different from histFinalize() in that it only
   // gets called on worker nodes that processed input events.
 
-  if(m_jetCleaning) delete m_jetCleaning;
+  //if(m_jetCleaning) delete m_jetCleaning;
 
   return EL::StatusCode::SUCCESS;
 }

@@ -4,9 +4,13 @@
 // Infrastructure includes
 #include "xAODRootAccess/Init.h"
 #include "xAODRootAccess/TEvent.h"
+#include "AsgTools/ToolHandle.h"
 #include "EventLoop/Algorithm.h"
 
+
 class JetCleaningTool;
+class IJetSelector;
+class IJERSmearingTool;
 
 class MyELAlg : public EL::Algorithm
 {
@@ -39,7 +43,9 @@ class MyELAlg : public EL::Algorithm
     xAOD::TEvent* m_event; //!
 
     #ifndef __CINT__
-    JetCleaningTool* m_jetCleaning; //!
+    //JetCleaningTool* m_jetCleaning; //!
+    ToolHandle<IJetSelector> m_jetCleaning;
+    ToolHandle<IJERSmearingTool> m_jerTool;
     #endif
 
 }; // class MyELAlg
