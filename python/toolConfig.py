@@ -7,7 +7,6 @@ def configTool(tool):
 
     print "\nHello from configTool in python!"
     print "You've provided a tool named %s" % tool.name()
-    print ""
 
     # Configure the tool
     tool.setProperty("CutLevel", "MediumBad")
@@ -15,3 +14,9 @@ def configTool(tool):
     # Test exception throwing
     #if tool.setProperty("BadProp", "BadVal").isFailure():
         #raise Exception("BadProperty")
+
+    # Test adding attributes
+    tool.py_attr = 2
+    print "tool.py_attr %g" % tool.py_attr
+
+    print ""
