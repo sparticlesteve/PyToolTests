@@ -11,15 +11,12 @@ class ObjWrapper
 {
   public:
     /// Memory initialization is done in the constructor
-    ObjWrapper(){
-      std::cout << "ObjWrapper constructor" << std::endl;
-      m_func = new TF1("func", "gaus(0)", 0, 10);
-    }
+    ObjWrapper();
     /// Memory cleanup is done in the destructor
-    ~ObjWrapper(){
-      std::cout << "ObjWrapper destructor" << std::endl;
-      delete m_func;
-    }
+    ~ObjWrapper();
+
+    /// Do some work
+    void doSomething();
 
   private:
     /// Heap objects

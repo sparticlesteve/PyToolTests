@@ -7,3 +7,4 @@ gROOT.ProcessLine('.x $ROOTCOREDIR/scripts/load_packages.C')
 from ROOT import ObjWrapper
 
 o = ObjWrapper()
+o.doSomething()
