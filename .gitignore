@@ -1,2 +1,4 @@
 run/submitDir
 *.swp
+*.pyc
+*.root

@@ -3,12 +3,12 @@
 
 PACKAGE          = PyToolTests
 PACKAGE_PRELOAD  =
-PACKAGE_CXXFLAGS = -g
+PACKAGE_CXXFLAGS = -g -I/cvmfs/atlas.cern.ch/repo/ATLASLocalRootBase/x86_64/python/2.7.4-x86_64-slc6-gcc48/sw/lcg/external/Python/2.7.4/x86_64-slc6-gcc48-opt/include/python2.7
 PACKAGE_OBJFLAGS =
 PACKAGE_LDFLAGS  =
 PACKAGE_BINFLAGS =
 PACKAGE_LIBFLAGS =
-PACKAGE_DEP      = AsgTools xAODRootAccess xAODBase xAODEventInfo xAODJet JetResolution JetSelectorTools
+PACKAGE_DEP      = xAODPrimitives xAODMuon MuonIdHelpers xAODEgamma AsgTools xAODRootAccess xAODBase xAODEventInfo xAODJet JetResolution JetSelectorTools EventLoop
 PACKAGE_TRYDEP   =
 PACKAGE_CLEAN    =
 PACKAGE_NOGRID   =
