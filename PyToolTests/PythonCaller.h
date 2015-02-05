@@ -32,7 +32,8 @@ StatusCode callPythonFunction(void* obj, const std::string& className,
 
   // Get the function
   PyObject* pyFunc = PyObject_GetAttrString(pyModule, funcName.c_str());
-  std::cout << "pyFunc " << pyFunc << " callable " << PyCallable_Check(pyFunc) << std::endl;
+  std::cout << "pyFunc " << pyFunc << " callable " << PyCallable_Check(pyFunc)
+            << std::endl;
 
   // Call the function
   PyObject* pyReturn = PyObject_CallFunctionObjArgs(pyFunc, pyObj, NULL);
