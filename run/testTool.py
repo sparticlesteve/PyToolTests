@@ -4,18 +4,16 @@
 
 from ROOT import gROOT
 gROOT.SetBatch()
-import PyCintex
+#import PyCintex
 import ROOT
 gROOT.ProcessLine('.x $ROOTCOREDIR/scripts/load_packages.C')
 
-from ROOT import JetCleaningTool
+from ROOT import TestTool
 
-# Configure the JetCleaningTool
-jetCleaning = JetCleaningTool('JetCleaningTool')
-jetCleaning.setProperty('OutputLevel', 2)
-jetCleaning.initialize()
+# Configure the TestTool
+tool = TestTool('TestTool')
 
-pmgr = jetCleaning.getPropertyMgr()
+pmgr = tool.getPropertyMgr()
 for (x, y) in pmgr.getProperties():
     print x, y
 
