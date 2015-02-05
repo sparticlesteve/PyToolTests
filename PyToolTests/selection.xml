@@ -1,5 +1,10 @@
 <lcgdict>
 
+  <class name="Property"/>
+  <class name="std::map<std::string, Property*>"/>
+  <class name="std::map<std::string, Property*>::iterator"/>
+  <class name="std::pair<const std::string, Property*>"/>
+  <class name="PropertyMgr"/>
   <class name="ObjWrapper"/>
 
 </lcgdict>
