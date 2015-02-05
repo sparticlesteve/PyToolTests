@@ -20,10 +20,9 @@
 /// Function which takes an object, its classname, a python module name,
 /// and a python function name and applies the python function to the object
 ///
-/// TODO: consider simplifying this. I don't need to do the user imports here.
-/// I could instead do them on the python side. In fact, I could probably
-/// forego using TPython altogether, initialize the python interpreter myself,
-/// and import ROOT in Batch mode on the python side.
+/// TODO: consider simplifying this further. I could maybe forego using
+/// TPython altogether, initialize the python interpreter myself, and
+/// import ROOT in Batch mode on the python side.
 ///
 StatusCode callPythonFunction(void* obj,
                               const std::string& className,
@@ -42,13 +41,9 @@ StatusCode callPythonFunction(void* obj,
   PyObject* pyObj = TPython::ObjectProxy_FromVoidPtr(obj, className.c_str());
   PYCHECK( pyObj, "unable to bind user object" );
 
-  // Import the user python module
-  PyObject* pyUserModule = PyImport_ImportModule(moduleName.c_str());
-  PYCHECK( pyUserModule, "unable to import user module" );
-
-  // Get the user function
-  PyObject* pyUserFunc = PyObject_GetAttrString(pyUserModule, funcName.c_str());
-  PYCHECK( pyUserFunc, "unable to retrieve user function" );
+  // User module and function names
+  PyObject* pyModName = PyString_FromString(moduleName.c_str());
+  PyObject* pyFuncName = PyString_FromString(funcName.c_str());
 
   // Import the wrapper module
   PyObject* pyWrapperModule = PyImport_ImportModule("PyToolTests.wrapper");
@@ -61,7 +56,8 @@ StatusCode callPythonFunction(void* obj,
 
   // Call the wrapper function
   PyObject* pyReturn =
-    PyObject_CallFunctionObjArgs(pyWrapperFunc, pyObj, pyUserFunc, NULL);
+    PyObject_CallFunctionObjArgs(pyWrapperFunc, pyObj,
+                                 pyModName, pyFuncName, NULL);
   PYCHECK( pyReturn, "failure in " << moduleName << "." << funcName );
 
   // Garbage collection
@@ -69,9 +65,8 @@ StatusCode callPythonFunction(void* obj,
   Py_XDECREF(pyReturn);
   Py_DECREF(pyWrapperFunc);
   Py_DECREF(pyWrapperModule);
-  Py_DECREF(pyUserFunc);
-  Py_DECREF(pyUserModule);
-  //Py_DECREF(pyUserModuleName);
+  Py_DECREF(pyFuncName);
+  Py_DECREF(pyModName);
 
   std::cout << "::callPythonFunction Finished" << std::endl;
   return StatusCode::SUCCESS;
