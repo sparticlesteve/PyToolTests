@@ -14,14 +14,15 @@ def generate_getter(prop_name):
 def generate_setter(prop_name):
     """Generate a setter for the tool property"""
     def set_prop(self, val):
-        return self.setProperty(prop_name, val)
+        return self.setProperty(type(val))(prop_name, val)
     return set_prop
 
 def pythonize_tool(tool):
     """Pythonize an ASG dual-use tool"""
     # Loop over tool properties
     for prop_name, prop in tool.getPropertyMgr().getProperties():
-        # Dynamically build python property attribute
+        # Dynamically build python property attribute and bind it to
+        # the tool class. Note: cannot bind to a single instance.
         get_prop = generate_getter(prop_name)
         set_prop = generate_setter(prop_name)
-        setattr(tool, prop_name, property(get_prop, set_prop))
+        setattr(type(tool), prop_name, property(get_prop, set_prop))
