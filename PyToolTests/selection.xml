@@ -6,5 +6,6 @@
   <class name="std::pair<const std::string, Property*>"/>
   <class name="PropertyMgr"/>
   <class name="ObjWrapper"/>
+  <class name="TestTool"/>
 
 </lcgdict>
