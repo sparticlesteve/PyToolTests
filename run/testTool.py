@@ -5,7 +5,7 @@
 from ROOT import gROOT
 gROOT.SetBatch()
 #import PyCintex
-import ROOT
+#import ROOT
 gROOT.ProcessLine('.x $ROOTCOREDIR/scripts/load_packages.C')
 
 from ROOT import TestTool
