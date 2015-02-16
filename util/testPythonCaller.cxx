@@ -1,5 +1,3 @@
-#include "Python.h"
-
 #include <iostream>
 
 #include "TSystem.h"
@@ -7,9 +5,7 @@
 #include "xAODRootAccess/Init.h"
 
 #include "PyToolTests/PythonCaller.h"
-
-#include "JetSelectorTools/JetCleaningTool.h"
-
+#include "PyToolTests/TestTool.h"
 
 int main(int argc, char* argv[])
 {
@@ -22,24 +18,24 @@ int main(int argc, char* argv[])
   }
 
   // Parameters
-  const std::string className = "JetCleaningTool";
-  const std::string toolName = "MyJetCleaningTool";
+  const std::string className = "TestTool";
+  const std::string toolName = "MyTestTool";
   const std::string moduleName = "PyToolTests.toolConfig";
   const std::string funcName = "configTool";
 
   // Instantiate a tool
   std::cout << "Instantiating the tool" << std::endl;
-  JetCleaningTool jetCleanTool(toolName);
+  TestTool testTool(toolName);
 
   // Call the python function
-  if(callPythonFunction(&jetCleanTool, className, moduleName, funcName).isFailure()){
+  if(callPythonFunction(&testTool, className, moduleName, funcName).isFailure()){
     std::cerr << "Error calling python config" << std::endl;
     return EXIT_FAILURE;
   }
 
   // Initialize the tool
-  if(jetCleanTool.initialize().isFailure()){
-    std::cerr << "Error initializing JetCleaningTool" << std::endl;
+  if(testTool.initialize().isFailure()){
+    std::cerr << "Error initializing TestTool" << std::endl;
     return EXIT_FAILURE;
   }
 
